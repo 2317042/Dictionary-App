@@ -69,6 +69,6 @@ def define_word():
 
 # Auto open browser when server starts
 if __name__ == "__main__":
-    port = 5000
-    Timer(1, lambda: webbrowser.open(f"http://127.0.0.1:{port}")).start()
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)
+
+    
