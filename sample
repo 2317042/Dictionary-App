@@ -1,30 +1,48 @@
 pipeline {
     agent any
 
+    environment {
+        BACKEND_URL = "http://localhost:8000"
+    }
+
     stages {
-        stage('Checkout') {
+        stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/2317042/Dictionary-App.git'
+                echo '🔄 Cloning Git repository...'
+                git branch: 'main', url: 'https://github.com/username/dictionary-app.git'
             }
         }
 
-        stage('Install Dependencies') {
+        stage('Start Backend') {
             steps {
-                bat 'python -m pip install --upgrade pip'
-                bat 'pip install flask requests'
+                echo '🚀 Starting Backend...'
+                bat "start /B python backend.py"
+                sleep 5
             }
         }
 
-        stage('Run App') {
+        stage('Start Frontend') {
             steps {
-                bat 'start /B python p5.py'
+                echo '🚀 Starting Frontend...'
+                bat "start /B python frontend.py"
+                sleep 5
+            }
+        }
+
+        stage('Open Frontend') {
+            steps {
+                echo '🌐 Opening Dictionary App in browser...'
+                bat "start http://localhost:5000"
             }
         }
     }
 
     post {
-        always {
-            echo "Dictionary App Pipeline Finished"
+        success {
+            echo "✅ Dictionary App deployed successfully!"
+        }
+        failure {
+            echo "❌ Deployment failed. Check Jenkins logs."
         }
     }
 }
